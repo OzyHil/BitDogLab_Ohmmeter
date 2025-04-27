@@ -82,9 +82,9 @@ int main()
     ssd1306_draw_string(&ssd, "3", 8, 26);           // Desenha uma string
     ssd1306_rect(&ssd, 31, 17, 2, 2, color, !color); // Desenha um retângulo
 
-    ssd1306_draw_string(&ssd, "Orange", 25, 8);  // Desenha uma string
-    ssd1306_draw_string(&ssd, "Yellow", 25, 17); // Desenha uma string
-    ssd1306_draw_string(&ssd, "Violet", 25, 26); // Desenha uma string
+    ssd1306_draw_string(&ssd, get_color_name(digits.first_digit), 25, 8);  // Desenha uma string
+    ssd1306_draw_string(&ssd, get_color_name(digits.second_digit), 25, 17); // Desenha uma string
+    ssd1306_draw_string(&ssd, get_color_name(digits.multiplier), 25, 26); // Desenha uma string
 
     ssd1306_line(&ssd, 85, 4, 85, 36, color); // Desenha uma linha vertical
 

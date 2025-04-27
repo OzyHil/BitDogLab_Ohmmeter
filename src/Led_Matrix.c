@@ -46,3 +46,25 @@ void draw_resistor_color(refs pio, resistor_digits digits){
         }
     }
 }
+
+// Array com os nomes das cores para os dígitos
+const char* COLOR_NAMES[10] = {
+    "Black",   // 0
+    "Brown",   // 1
+    "Red",     // 2
+    "Orange",  // 3
+    "Yellow",  // 4
+    "Green",   // 5
+    "Blue",    // 6
+    "Purple",  // 7
+    "Gray",    // 8
+    "White"    // 9
+};
+
+// Função para obter o nome da cor do primeiro dígito
+const char* get_color_name(int digit) {
+    if (digit >= 0 && digit <= 9) {
+        return COLOR_NAMES[digit];
+    }
+    return "";
+}

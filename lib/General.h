@@ -53,4 +53,6 @@ float find_nearest_e24(float resistance);
 float calculate_error_percentage(float measured_value, float e24_value);
 
 resistor_digits extract_digits(float resistance);
+
+const char* get_color_name(int digit);
 #endif
