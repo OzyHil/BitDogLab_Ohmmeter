@@ -51,3 +51,63 @@ refs init_pio()
     pio_matrix_program_init(pio.ref, pio.state_machine, pio.offset, LED_MATRIX); // Inicializa o programa
     return pio;
 }
+float e24_values[] = {
+    1.0, 1.1, 1.2, 1.3, 1.5, 
+    1.6, 1.8, 2.0, 2.2, 2.4, 
+    2.7, 3.0, 3.3, 3.6, 3.9, 
+    4.3, 4.7, 5.1, 5.6, 6.2, 
+    6.8, 7.5, 8.2, 9.1, 10.0
+};
+
+float find_nearest_e24(float resistance) {
+    if (resistance <= 0) return 0; 
+    
+    float exponent = floor(log10(resistance));
+    float power_of_ten = pow(10, exponent);
+    
+    float normalized = resistance / power_of_ten;
+    
+    float min_diff = INFINITY;
+    float closest_value = 0;
+    
+    for (int i = 0; i < 25; i++) {
+        float diff = fabsf(normalized - e24_values[i]);
+        if (diff < min_diff) {
+            min_diff = diff;
+            closest_value = e24_values[i];
+        }
+    }
+    
+    if (closest_value == 10.0) {
+        return 1.0 * power_of_ten * 10;
+    } else {
+        return closest_value * power_of_ten;
+    }
+}
+float calculate_error_percentage(float measured_value, float e24_value) {
+    return (fabsf(measured_value - e24_value) / e24_value) * 100.0f;
+}
+
+resistor_digits extract_digits(float resistance) {
+    resistor_digits result;
+    
+    // Determinar quantos dígitos temos antes do ponto decimal
+    int num_digits = 0;
+    float temp = resistance;
+    while (temp >= 1.0) {
+        temp /= 10.0;
+        num_digits++;
+    }
+    
+    // Normalizar para um valor entre 1.0 e 99.9
+    float normalized = resistance / pow(10, num_digits - 2);
+    
+    // Extrair os dígitos
+    int normalized_int = (int)round(normalized);
+    
+    result.first_digit = normalized_int / 10;
+    result.second_digit = normalized_int % 10;
+    result.multiplier = num_digits - 2;
+    
+    return result;
+}

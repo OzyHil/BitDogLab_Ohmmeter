@@ -12,6 +12,7 @@
 #include "hardware/i2c.h"   // Comunicação I2C
 #include "lib/ssd1306.h"
 #include "pico/bootrom.h"
+#include <math.h>
 
 #define I2C_PORT i2c1
 #define I2C_SDA 14
@@ -29,6 +30,13 @@ typedef struct
     uint state_machine;   // Máquina de estado usada
 } refs;
 
+// Estrutura para armazenar os dígitos e o multiplicador
+typedef struct {
+    int first_digit;    // Primeiro dígito significativo
+    int second_digit;   // Segundo dígito significativo
+    int multiplier;     // Multiplicador (potência de 10)
+} resistor_digits;
+
 // Função para inicializar a configuração do sistema (clocks, I/O, etc.)
 void init_system_config();
 
@@ -40,4 +48,9 @@ void configure_display(ssd1306_t *ssd);
 
 refs init_pio();
 
+float find_nearest_e24(float resistance);
+
+float calculate_error_percentage(float measured_value, float e24_value);
+
+resistor_digits extract_digits(float resistance);
 #endif
