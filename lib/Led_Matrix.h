@@ -15,5 +15,6 @@ typedef struct {
 // Converte uma cor RGB para o formato aceito pela matriz
 uint32_t rgb_matrix(led_color color);
 
-void draw_resistor_color(refs pio);
+void draw_resistor_color(refs pio, resistor_digits digits);
+
 #endif

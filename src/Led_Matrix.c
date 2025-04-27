@@ -1,19 +1,18 @@
 #include "Led_Matrix.h" // Inclusão da biblioteca para controlar a matriz de LEDs
 
-// Definições de cores RGB
-const led_color DARK =   {.red = 0, .green = 0, .blue = 0};
-const led_color BROWN =  {.red = 3, .green = 1, .blue = 1};
-const led_color RED =    {.red = 3, .green = 0, .blue = 0};
-const led_color ORANGE = {.red = 4, .green = 1, .blue = 0};
-const led_color YELLOW = {.red = 4, .green = 2, .blue = 0};
-const led_color GREEN =  {.red = 1, .green = 5, .blue = 0};
-const led_color BLUE =   {.red = 0, .green = 0, .blue = 8};
-const led_color PURPLE = {.red = 4, .green = 0, .blue = 7};
-const led_color GRAY =   {.red = 1, .green = 1, .blue = 1};
-const led_color WHITE =  {.red = 6, .green = 6, .blue = 6};
-const led_color GOLDEN = {.red = 2, .green = 1, .blue = 0};
-const led_color SILVER = {.red = 3, .green = 3, .blue = 3};
-
+// Matriz de cores para os dígitos (0-9)
+const led_color DIGIT_COLORS[10] = {
+    {.red = 0, .green = 0, .blue = 0},    // 0 - Preto
+    {.red = 3, .green = 1, .blue = 1},    // 1 - Marrom
+    {.red = 3, .green = 0, .blue = 0},    // 2 - Vermelho
+    {.red = 4, .green = 1, .blue = 0},    // 3 - Laranja
+    {.red = 4, .green = 2, .blue = 0},    // 4 - Amarelo
+    {.red = 1, .green = 5, .blue = 0},    // 5 - Verde
+    {.red = 0, .green = 0, .blue = 8},    // 6 - Azul
+    {.red = 4, .green = 0, .blue = 7},    // 7 - Roxo
+    {.red = 1, .green = 1, .blue = 1},    // 8 - Cinza
+    {.red = 6, .green = 6, .blue = 6}     // 9 - Branco
+};
 const int8_t matrix[NUM_PIXELS] ={
     0, 3, 3, 3, 0,
     0, 0, 0, 0, 0,
@@ -27,23 +26,23 @@ uint32_t rgb_matrix(led_color color){
     return (color.green << 24) | (color.red << 16) | (color.blue << 8);
 }
 
-void draw_resistor_color(refs pio){
+void draw_resistor_color(refs pio, resistor_digits digits){
     for (int16_t i = 0; i < NUM_PIXELS; i++)
     {
         // Envia a cor correspondente para cada valor da matriz
         switch (matrix[i])
         {
         case 1:
-            pio_sm_put_blocking(pio.ref, pio.state_machine, rgb_matrix(WHITE));
+            pio_sm_put_blocking(pio.ref, pio.state_machine, rgb_matrix(DIGIT_COLORS[digits.first_digit]));
             break;
         case 2:
-            pio_sm_put_blocking(pio.ref, pio.state_machine, rgb_matrix(SILVER));
+            pio_sm_put_blocking(pio.ref, pio.state_machine, rgb_matrix(DIGIT_COLORS[digits.second_digit]));
             break;
         case 3:
-            pio_sm_put_blocking(pio.ref, pio.state_machine, rgb_matrix(GRAY));
+            pio_sm_put_blocking(pio.ref, pio.state_machine, rgb_matrix(DIGIT_COLORS[digits.multiplier]));
             break;
         default:
-            pio_sm_put_blocking(pio.ref, pio.state_machine, rgb_matrix(DARK));
+            pio_sm_put_blocking(pio.ref, pio.state_machine, rgb_matrix(DIGIT_COLORS[0]));
         }
     }
 }

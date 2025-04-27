@@ -59,8 +59,6 @@ int main()
     error_percentage = calculate_error_percentage(R_x, nearest_resistor);
 
     resistor_digits digits = extract_digits(nearest_resistor);
-    printf("%d, %d, %d\n", digits.first_digit, digits.second_digit, digits.multiplier);
-
 
 
 
@@ -106,13 +104,6 @@ int main()
     ssd1306_send_data(&ssd); // Atualiza o display
     sleep_ms(700);
 
-
-
-
-
-
-
-
-    draw_resistor_color(pio);
+    draw_resistor_color(pio, digits);
   }
 }
